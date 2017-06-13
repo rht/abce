@@ -11,14 +11,10 @@ from abce import Simulation, gui
 from firm import Firm
 from household import Household
 
-parameters = {'name': '2x2',
-              'random_seed': None,
-              'rounds': 2500,
-              'num_firms': 10}
 
-#@gui(parameters)
-def main(parameters):
-    simulation = Simulation(rounds=parameters['rounds'], processes=1)
+#@gui
+def main():
+    simulation = Simulation(rounds=2500, name='2x2', random_seed=None, processes=1)
     simulation.declare_round_endowment(resource='adult', units=1, product='labor')
     simulation.declare_perishable(good='labor')
 
@@ -27,8 +23,8 @@ def main(parameters):
     simulation.panel('firm', possessions=['money', 'GOOD'],
                     variables=['price', 'inventory'])
 
-    firms = simulation.build_agents(Firm, 'firm', number=parameters['num_firms'])
-    households = simulation.build_agents(Household, 'household', number=1, parameters=parameters)
+    firms = simulation.build_agents(Firm, 'firm', number=10)
+    households = simulation.build_agents(Household, 'household', number=1)
 
     for r in simulation.next_round():
         households.do('sell_labor')
@@ -45,4 +41,4 @@ def main(parameters):
     simulation.graphs()
 
 if __name__ == '__main__':
-    main(parameters)
+    main()

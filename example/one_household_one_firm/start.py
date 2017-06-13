@@ -11,13 +11,10 @@ from abce import Simulation, gui
 from firm import Firm
 from household import Household
 
-parameters = {'name': '2x2',
-              'random_seed': None,
-              'rounds': 10}
 
-@gui(parameters)
-def main(parameters):
-    w = Simulation(rounds=parameters['rounds'])
+@gui
+def main():
+    w = Simulation(rounds=10, name='2x2', random_seed=None)
     w.declare_round_endowment(resource='adult', units=1, product='labor')
     w.declare_perishable(good='labor')
 
@@ -38,4 +35,4 @@ def main(parameters):
         households.do('consumption')
 
 if __name__ == '__main__':
-    main(parameters)
+    main()

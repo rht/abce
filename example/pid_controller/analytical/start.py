@@ -13,17 +13,12 @@ from market import Market
 from abce import Simulation, gui
 
 
-
-simulation_parameters = {'name': "analytical",
-                         'random_seed': None,
-                         'rounds': 3000}
-
-@gui(simulation_parameters)
+@gui
 def main(simulation_parameters):
-    s = Simulation(rounds=simulation_parameters['rounds'])
+    s = Simulation(rounds=3000, name='analytical', random_seed=None)
 
-    firms = s.build_agents(Firm, 'firm', parameters=simulation_parameters, number=1)
-    market = s.build_agents(Market, 'market', parameters=simulation_parameters, number=1)
+    firms = s.build_agents(Firm, 'firm', number=1)
+    market = s.build_agents(Market, 'market', number=1)
     for r in s.next_round():
         firms.do('my_production')
         firms.do('selling')
@@ -33,4 +28,4 @@ def main(simulation_parameters):
         market.do('consumption')
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()

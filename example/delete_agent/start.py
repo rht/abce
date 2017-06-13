@@ -3,16 +3,12 @@ from agent import Agent
 from killer import Killer
 from abce import Simulation, gui
 
-simulation_parameters = {'name': 'name',
-                         'rounds': 100,
-                         'firms': 5,
-                         'agents': 100}
 
                              # commend out simulation.graphs() and uncomment
                              # this line to run the simulation with a Graphical
-#@gui(simulation_parameters) # User Interface
-def main(simulation_parameters):
-        simulation = Simulation(rounds=simulation_parameters['rounds'])
+#@gui # User Interface
+def main():
+        simulation = Simulation(rounds=100, name='name')
         simulation.declare_round_endowment(resource='labor_endowment',
                                            units=1,
                                            product='labor')
@@ -22,11 +18,9 @@ def main(simulation_parameters):
         simulation.panel('agent', possessions=[], variables=['idn'])
 
         agents = simulation.build_agents(Agent, 'agent',
-                       number=simulation_parameters['agents'],
-                       parameters=simulation_parameters)
+                       number=100)
         killers = simulation.build_agents(Killer, 'killer',
-                       number=1,
-                       parameters=simulation_parameters)
+                       number=1)
         for r in simulation.next_round():
             killers.do('kill')
             agents.do('am_I_dead')
@@ -38,5 +32,5 @@ def main(simulation_parameters):
         simulation.graphs()
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()
 

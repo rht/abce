@@ -7,14 +7,9 @@ from firm import Firm
 from household import Household
 
 
-simulation_parameters = {'name': 'name',
-                         'trade_logging': 'off',
-                         'random_seed': None,
-                         'rounds': 40}
-
-#@gui(simulation_parameters)
-def main(simulation_parameters):
-    w = Simulation(rounds=simulation_parameters['rounds'])
+#@gui
+def main():
+    w = Simulation(rounds=40, name='name', random_seed=None, trade_logging='off')
     w.declare_round_endowment(resource='labor_endowment', units=5, product='labor')
     w.declare_perishable(good='labor')
     w.panel('household', possessions=['consumption_good'])
@@ -36,4 +31,4 @@ def main(simulation_parameters):
 
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()

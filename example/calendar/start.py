@@ -2,11 +2,9 @@ from __future__ import division
 from agent import Agent
 from abce import Simulation, gui
 
-simulation_parameters = {'name': 'datetimedemonstration',
-                         'rounds': 50,}
 
-def main(simulation_parameters):
-        simulation = Simulation(rounds=simulation_parameters['rounds'])
+def main():
+        simulation = Simulation(rounds=50, name='datetimedemonstration')
         simulation.declare_calendar(2000, 1, 1)
         simulation.panel('agent', possessions=['money'])
         simulation.aggregate('agent', possessions=['labor'])
@@ -33,5 +31,5 @@ def main(simulation_parameters):
 
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()
 

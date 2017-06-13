@@ -4,16 +4,12 @@ from household import Household
 from messenger import Messenger
 from abce import Simulation, gui
 
-simulation_parameters = {'name': 'name',
-                         'rounds':  10,
-                         'firms': 1,
-                         'households': 0}
 
                              # commend out simulation.graphs() and uncomment
                              # this line to run the simulation with a Graphical
 #@gui(simulation_parameters) # User Interface
-def main(simulation_parameters):
-        simulation = Simulation(rounds=simulation_parameters['rounds'])
+def main():
+        simulation = Simulation(rounds=10, name='name')
 
         simulation.declare_round_endowment(resource='labor_endowment',
                                            units=1,
@@ -28,12 +24,10 @@ def main(simulation_parameters):
                                       variables=['count']) # put a list of household possessions to track here
 
         firms = simulation.build_agents(Firm, 'firm',
-                       number=simulation_parameters['firms'],
-                       parameters=simulation_parameters)
+                       number=1)
 
         households = simulation.build_agents(Household, 'household',
-                       number=simulation_parameters['households'],
-                       parameters=simulation_parameters)
+                       number=0)
 
         messengers = simulation.build_agents(Messenger, 'messenger', 1)
 
@@ -49,5 +43,5 @@ def main(simulation_parameters):
         simulation.graphs()
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()
 

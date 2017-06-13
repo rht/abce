@@ -12,11 +12,10 @@ from market import Market
 from labormarket import LaborMarket
 from abce import Simulation, gui
 
-simulation_parameters = {'name': 'Sticky Prices Microfoundations', 'rounds': 20}
 
-@gui(simulation_parameters)
-def main(simulation_parameters):
-    s = Simulation(**simulation_parameters)
+@gui
+def main():
+    s = Simulation(rounds=20, name='Sticky Prices Microfoundations')
     s.declare_perishable('labor')
 
     firms = s.build_agents(Firm, 'firm', 1)
@@ -34,4 +33,4 @@ def main(simulation_parameters):
         market.do('consumption')
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()

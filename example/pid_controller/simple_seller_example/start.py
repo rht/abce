@@ -12,13 +12,9 @@ from household import Household
 from abce import Simulation, gui
 
 
-simulation_parameters = {'name':'name',
-                         'random_seed': None,
-                         'rounds': 300}
-
-@gui(simulation_parameters)
-def main(simulation_parameters):
-    s = Simulation(rounds=simulation_parameters['rounds'])
+@gui
+def main():
+    s = Simulation(rounds=300, name='name', random_seed=None)
     s.panel('household', possessions=['cookies'])
     s.panel('firm', possessions=['cookies'])
 
@@ -34,4 +30,4 @@ def main(simulation_parameters):
         households.do('consumption')
 
 if __name__ == '__main__':
-    main(simulation_parameters)
+    main()
