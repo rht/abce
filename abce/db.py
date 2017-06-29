@@ -47,7 +47,7 @@ class Database(multiprocessing.Process):
                               "(round INT, id INT, PRIMARY KEY(round, id))")
 
     def add_panel(self, group, column_names):
-        self.panels['panel_' + group] = list(column_names)
+        self.panels['panel_' + group] = ['id', 'round'] + list(column_names)
 
     def add_aggregate(self, group, column_names):
         table_name = 'aggregate_' + group
@@ -68,15 +68,9 @@ class Database(multiprocessing.Process):
         if self.trade_log:
             trade_ex_str = self.add_trade_log()
         for table_name in self.panels:
-            panel_str = ' FLOAT,'.join(self.panels[table_name]) + ' FLOAT,'
-
-            create_str = "CREATE TABLE " + table_name + "(id INT, round INT, %s PRIMARY KEY(round, id))" % panel_str
-            self.database.execute(create_str)
-
-            format_strings = ','.join(['?'] * (2 + len(self.panels[table_name])))
-            self.ex_str[table_name] = "INSERT INTO " + table_name + \
-                "(id, round, " + ','.join(list(self.panels[table_name])) + ") VALUES (%s)" % format_strings
-
+            panel_str = ' INT,'.join(self.panels[table_name]) + ' INT,'
+            self.database.execute(
+                "CREATE TABLE " + table_name + "(%s PRIMARY KEY(round, id))" % panel_str)
         for table_name in self.aggregates:
             agg_str = ' FLOAT,'.join(self.aggregates[table_name]) + ' FLOAT,'
 
@@ -99,7 +93,7 @@ class Database(multiprocessing.Process):
 
             elif msg[0] == 'panel':
                     table_name = 'panel_' + msg[1]
-                    self.write_pa(table_name, msg[2])
+                    self.write_panel(table_name, msg[2])
 
             elif msg[0] == 'aggregate':
                 round = msg[1]
@@ -164,8 +158,13 @@ class Database(multiprocessing.Process):
             self.write_or_update(table_name, data_to_write)
         self.database.execute(update_str, rows_to_write)
 
-    def write_pa(self, table_name, rows_to_write):
-        self.database.execute(self.ex_str[table_name], rows_to_write)
+    def write_panel(self, table_name, rows_to_write):
+        ex_str = "INSERT INTO " + table_name + \
+            "(" + ','.join(list(self.panels[table_name])) + ") VALUES (%s)"
+
+        format_strings = ','.join(['?'] * len(rows_to_write))
+        self.database.execute(ex_str % format_strings, rows_to_write)
+
 
     def write(self, table_name, data_to_write):
         try:
