@@ -557,15 +557,11 @@ cdef class Trade:
 
     def _reject_polled_but_not_accepted_offers(self):
         cdef Offer offer
-        to_reject = []
-        for offers in list(self._open_offers.values()):
-            for offer in list(offers.values()):
-                if offer.open_offer_status == 'polled':
-                    to_reject.append(offer)
-        for offer in to_reject:
-            self.reject(offer)
+        for offer in self._polled_offers.values():
+            self._reject(offer)
+        self._polled_offers = {}
 
-    cpdef reject(self, Offer offer):
+    cdef _reject(self, Offer offer):
         """  Rejects the offer offer
 
         Args:
