@@ -69,8 +69,14 @@ class Database(multiprocessing.Process):
             trade_ex_str = self.add_trade_log()
         for table_name in self.panels:
             panel_str = ' INT,'.join(self.panels[table_name]) + ' INT,'
+
             self.database.execute(
                 "CREATE TABLE " + table_name + "(%s PRIMARY KEY(round, id))" % panel_str)
+
+            format_strings = ','.join(['?'] * len(self.panels[table_name]))
+            self.ex_str[table_name] = "INSERT INTO " + table_name + \
+            "(" + ','.join(list(self.panels[table_name])) + ") VALUES (%s)" % format_strings
+
         for table_name in self.aggregates:
             agg_str = ' FLOAT,'.join(self.aggregates[table_name]) + ' FLOAT,'
 
@@ -159,11 +165,8 @@ class Database(multiprocessing.Process):
         self.database.execute(update_str, rows_to_write)
 
     def write_panel(self, table_name, rows_to_write):
-        ex_str = "INSERT INTO " + table_name + \
-            "(" + ','.join(list(self.panels[table_name])) + ") VALUES (%s)"
 
-        format_strings = ','.join(['?'] * len(rows_to_write))
-        self.database.execute(ex_str % format_strings, rows_to_write)
+        self.database.execute(self.ex_str[table_name], rows_to_write)
 
 
     def write(self, table_name, data_to_write):
