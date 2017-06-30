@@ -142,11 +142,11 @@ class ProductionMultifirm(abce.Agent, abce.FirmMultiTechnologies):
         assert self.possession('c') == 0, self.possession('c')
         assert self.possession('d') == 0, self.possession('d')
         assert self.possession('e') == 0, self.possession('e')
-        expected = (2 * (0.2 * 1 ** 0.5 + 0.2 * 2 ** 0.5 + 0.2 *
-                    2 ** 0.5 + 0.2 * 2 ** 0.5 + 0.2 * 2 ** 0.5) **
-                    (1 / 0.5))
-        assert self.possession('consumption_good') == expected, (
-            self.possession('consumption_good'), expected)
+        expected = 2 * (0.2 * 1 ** 0.5 + 0.2 * 2 ** 0.5 + 0.2 *
+                        2 ** 0.5 + 0.2 * 2 ** 0.5 + 0.2 * 2 ** 0.5) ** (1 / 0.5)
+        assert iszero(self.possession('consumption_good') - expected, (self.possession(
+            'consumption_good'), expected))
+        # this is exactly zero on my computer, but not on travis
         self.destroy('a', 1)
         self.destroy('consumption_good', expected)
 
