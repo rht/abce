@@ -75,7 +75,7 @@ class Database(multiprocessing.Process):
 
             format_strings = ','.join(['?'] * (2 + len(self.panels[table_name])))
             self.ex_str[table_name] = "INSERT INTO " + table_name + \
-            "(id, round, " + ','.join(list(self.panels[table_name])) + ") VALUES (%s)" % format_strings
+                "(id, round, " + ','.join(list(self.panels[table_name])) + ") VALUES (%s)" % format_strings
 
         for table_name in self.aggregates:
             agg_str = ' FLOAT,'.join(self.aggregates[table_name]) + ' FLOAT,'
@@ -167,7 +167,6 @@ class Database(multiprocessing.Process):
     def write_pa(self, table_name, rows_to_write):
         self.database.execute(self.ex_str[table_name], rows_to_write)
 
-
     def write(self, table_name, data_to_write):
         try:
             ex_str = "INSERT INTO " + table_name + \
@@ -211,6 +210,7 @@ class Database(multiprocessing.Process):
     def aggregate(self, table_name, data):
         for key in data:
             self.data[table_name][key].append(data[key])
+
 
 class TableMissing(sqlite3.OperationalError):
     def __init__(self, message):

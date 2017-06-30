@@ -58,6 +58,7 @@ def main(processes):
     compare('aggregate_panel_agent.csv', simulation.path, 'aggregated panel logging test\t')
     compare('panel_agent.csv', simulation.path, 'panel logging test\t\t\t')
 
+
 if __name__ == '__main__':
     main(processes=1)
     main(processes=4)
