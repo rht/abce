@@ -109,7 +109,7 @@ class Database(multiprocessing.Process):
                 else:
                     self.write_pa(table_name, [self.round] + self.aggregation[table_name].sum())
                     self.write_pa(table_name + '_mean', [self.round] + self.aggregation[table_name].mean())
-                    self.write_pa(table_name + '_std', [self.round] + self.aggregation[table_name].variance())
+                    self.write_pa(table_name + '_std', [self.round] + self.aggregation[table_name].std())
                     self.aggregation[table_name].clear()
                     self.round = round
                     self.aggregation[table_name].update(msg[3])
@@ -211,7 +211,6 @@ class Database(multiprocessing.Process):
     def aggregate(self, table_name, data):
         for key in data:
             self.data[table_name][key].append(data[key])
-
 
 class TableMissing(sqlite3.OperationalError):
     def __init__(self, message):
