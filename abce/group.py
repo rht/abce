@@ -2,6 +2,7 @@ from builtins import list
 from collections import defaultdict
 from pprint import pprint
 from functools import partial
+from numba import jit
 
 
 def get_methods(a_class):
@@ -11,6 +12,7 @@ def get_methods(a_class):
 
 
 class Group(object):
+    @jit
     def __init__(self, sim, groups, agent_class=None):
         self.sim = sim
         self.num_managers = sim.processes
@@ -38,14 +40,18 @@ class Group(object):
         else:
             return self
 
+    @jit(nogil=True)
     def execute_serial(self, command):
         self.sim.messagess[-2].clear()
         out_messages = self._processor_groups[0].execute(
             self.groups, command, [])
-        for pgid, messages in enumerate(out_messages):
-            self.sim.messagess[pgid].extend(messages)
+        for i in range(len(out_messages)):
+            self.sim.messagess[i].extend(out_messages[i])
+        #for pgid, messages in enumerate(out_messages):
+        #    self.sim.messagess[pgid].extend(messages)
         return self.sim.messagess[-2]
 
+    @jit
     def execute_parallel(self, command):
         self.sim.messagess[-2].clear()
         parameters = ((pg, self.groups, command, self.sim.messagess[pgid])
